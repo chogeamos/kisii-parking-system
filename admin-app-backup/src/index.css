@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles (optional) */
+body {
+  @apply bg-gray-50 text-gray-800 font-sans;
+}
+
+button {
+  @apply rounded-md px-4 py-2 font-medium transition;
+}
+
+button:hover {
+  @apply opacity-90;
+}

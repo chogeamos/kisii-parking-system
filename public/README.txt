@@ -1,0 +1,1 @@
+Place built admin app here (contents of admin-app/build) if you want backend to serve it.
