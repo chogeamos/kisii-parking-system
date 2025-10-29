@@ -6,7 +6,11 @@ const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
 
-// ==================== ADMIN ROUTE ====================
+/* ============================
+   🧩 API ROUTES
+============================ */
+
+// --- Admin API ---
 app.get("/api/admin/sessions", (req, res) => {
   res.json([
     { id: 1, reg_number: "KAA 123A", phone: "0712345678", expiry_time: new Date(), payment_status: "Paid" },
@@ -14,8 +18,7 @@ app.get("/api/admin/sessions", (req, res) => {
   ]);
 });
 
-// ==================== USER ROUTE ====================
-// Example: /api/user/sessions/KAA%20123A
+// --- User API ---
 app.get("/api/user/sessions/:plate", (req, res) => {
   const { plate } = req.params;
   const sessions = [
@@ -27,18 +30,22 @@ app.get("/api/user/sessions/:plate", (req, res) => {
   else res.status(404).json({ error: "Not found" });
 });
 
-// ==================== FRONTEND SERVING ====================
-// Admin frontend
-app.use(express.static(path.join(__dirname, "admin-app/build")));
+/* ============================
+   🖥️  FRONTEND ROUTES
+============================ */
 
-// User frontend
+// --- User frontend ---
 app.use("/user", express.static(path.join(__dirname, "user-app/build")));
+app.get("/user/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "user-app/build", "index.html"));
+});
 
-// Catch-all for admin (root)
+// --- Admin frontend (default) ---
+app.use("/", express.static(path.join(__dirname, "admin-app/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "admin-app/build", "index.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`Kisii-parking backend listening on port ${PORT}`);
+  console.log(`✅ Kisii Parking System running on port ${PORT}`);
 });
