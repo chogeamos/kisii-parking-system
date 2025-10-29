@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Kisii Smart Parking System - Node.js backend serving admin and user React apps",
   "main": "server.js",
-  "type": "commonjs",
   "scripts": {
     "start": "node server.js",
+    "build": "npm install --prefix admin-app && npm install --prefix user-app && npm run build --prefix admin-app && npm run build --prefix user-app",
     "dev": "nodemon server.js",
     "test": "node --version && jest --runInBand || echo 'no jest installed'",
     "worker": "node workers/processor.js"
