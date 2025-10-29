@@ -61,7 +61,7 @@ app.get("/api/user/sessions/:plate", (req, res) => {
    🖥️ FRONTEND ROUTES
 =============================== */
 
-// ✅ Serve user frontend first (important to avoid redirect conflict)
+// ✅ Serve user frontend first
 app.use("/user", express.static(path.join(__dirname, "user-app", "build")));
 app.get("/user/*", (req, res) => {
   res.sendFile(path.join(__dirname, "user-app", "build", "index.html"));
@@ -73,12 +73,12 @@ app.get("/admin/*", (req, res) => {
   res.sendFile(path.join(__dirname, "admin-app", "build", "index.html"));
 });
 
-// ✅ Default route (root -> user)
+// ✅ Default route (root → user)
 app.get("/", (req, res) => {
   res.redirect("/user");
 });
 
-// ✅ Start server
-app.listen(PORT, () => {
+// ✅ Start server (IMPORTANT for Render)
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Kisii Parking System running on port ${PORT}`);
 });
