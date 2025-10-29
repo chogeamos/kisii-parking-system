@@ -4,6 +4,7 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Middleware
 app.use(express.json());
 
 /* ===============================
@@ -47,7 +48,11 @@ app.get("/api/user/sessions/:plate", (req, res) => {
       payment_status: "Unpaid",
     },
   ];
-  const found = sessions.find((s) => s.reg_number === plate.toUpperCase());
+
+  const found = sessions.find(
+    (s) => s.reg_number.toUpperCase() === plate.toUpperCase()
+  );
+
   if (found) res.json(found);
   else res.status(404).json({ error: "Not found" });
 });
@@ -56,23 +61,24 @@ app.get("/api/user/sessions/:plate", (req, res) => {
    🖥️ FRONTEND ROUTES
 =============================== */
 
-// Serve admin build
-app.use("/admin", express.static(path.join(__dirname, "admin-app/build")));
-app.get("/admin/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "admin-app/build", "index.html"));
-});
-
-// Serve user build
-app.use("/user", express.static(path.join(__dirname, "user-app/build")));
+// ✅ Serve user frontend first (important to avoid redirect conflict)
+app.use("/user", express.static(path.join(__dirname, "user-app", "build")));
 app.get("/user/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "user-app/build", "index.html"));
+  res.sendFile(path.join(__dirname, "user-app", "build", "index.html"));
 });
 
-// Default: redirect root to /user
+// ✅ Serve admin frontend
+app.use("/admin", express.static(path.join(__dirname, "admin-app", "build")));
+app.get("/admin/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "admin-app", "build", "index.html"));
+});
+
+// ✅ Default route (root -> user)
 app.get("/", (req, res) => {
   res.redirect("/user");
 });
 
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`✅ Kisii Parking System running on port ${PORT}`);
 });
